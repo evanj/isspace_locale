@@ -1,4 +1,4 @@
-# locale_isspace: weird isspace behaviour on Mac OS X
+# isspace_locale: weird isspace behaviour on Mac OS X
 
 A C program to print the values where `isspace()` returns true. This was used to understand a strange corner case bug in Postgres when running on Mac OS X.
 

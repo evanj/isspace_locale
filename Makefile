@@ -1,9 +1,9 @@
 CFLAGS=-Wall -Wextra -Werror --std=c17
 
-all: locale_isspace
+all: isspace_locale
 
 format:
 	clang-format --Werror -i *.c
 
 clean:
-	$(RM) locale_isspace
+	$(RM) isspace_locale
