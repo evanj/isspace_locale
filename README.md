@@ -14,7 +14,7 @@ The extra fun is on Mac OS X, `isspace()` interpets its argument as a wide chara
 
 "The 4.4BSD extension of accepting arguments outside of the range of the unsigned char type in locales with large character sets is considered obsolete and may not be supported in future releases.  The iswspace() function should be used instead."
 
-It appears that when using the UTF-8 character set (the default), it interpets the argument as a Unicode code point. This means it returns true for (0x85 = NEL = Next Line)[https://codepoints.net/U+0085], and (0xA0 = NBSP = No-Break Space)[https://codepoints.net/U+00A0]. By default, a process starts in the C locale, so it should not do this, but if it calls `setlocale()` for any reason, the behaviour can change. To avoid this, use your own `isspace()` function:
+It appears that when using the UTF-8 character set (the default), it interpets the argument as a Unicode code point. This means it returns true for [0x85 = NEL = Next Line](https://codepoints.net/U+0085), and [0xA0 = NBSP = No-Break Space](https://codepoints.net/U+00A0). By default, a process starts in the C locale, so it should not do this, but if it calls `setlocale()` for any reason, the behaviour can change. To avoid this, use your own `isspace()` function:
 
 ```
 int isspace_ascii(int c)
