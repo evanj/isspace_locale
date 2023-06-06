@@ -25,13 +25,14 @@ int isspace_ascii(int c)
 
 ## Mac OS X Output
 
-As of Venture 13.4:
+As of Ventura 13.4:
 
 ```
 default locale at startup LC_TYPE=C
 sizeof(int)=4 (32 bits; 8 hex chars)
 EOF=-1 = 0xffffffff
-testing isspace() in inclusive range [-128, 255] with locales:
+testing isspace() in inclusive range [-128, 8208] with locales:
+  NOTE: values outside [-1, 255] are undefined in the C standard
     C
     en_US.UTF-8
     en_US.US-ASCII
@@ -89,6 +90,71 @@ c: 160 = 0x000000a0 ((char) -96 = 0xa0)
     en_US.UTF-8: isspace(160) = 1
     en_US: isspace(160) = 1
     de_DE.UTF-8: isspace(160) = 1
+
+c: 5760 = 0x00001680 ((char) -128 = 0x80) (undefined result in C standard)
+    en_US.UTF-8: isspace(5760) = 1
+    en_US: isspace(5760) = 1
+    de_DE.UTF-8: isspace(5760) = 1
+
+c: 8192 = 0x00002000 ((char) 0 = 0x00) (undefined result in C standard)
+    en_US.UTF-8: isspace(8192) = 1
+    en_US: isspace(8192) = 1
+    de_DE.UTF-8: isspace(8192) = 1
+
+c: 8193 = 0x00002001 ((char) 1 = 0x01) (undefined result in C standard)
+    en_US.UTF-8: isspace(8193) = 1
+    en_US: isspace(8193) = 1
+    de_DE.UTF-8: isspace(8193) = 1
+
+c: 8194 = 0x00002002 ((char) 2 = 0x02) (undefined result in C standard)
+    en_US.UTF-8: isspace(8194) = 1
+    en_US: isspace(8194) = 1
+    de_DE.UTF-8: isspace(8194) = 1
+
+c: 8195 = 0x00002003 ((char) 3 = 0x03) (undefined result in C standard)
+    en_US.UTF-8: isspace(8195) = 1
+    en_US: isspace(8195) = 1
+    de_DE.UTF-8: isspace(8195) = 1
+
+c: 8196 = 0x00002004 ((char) 4 = 0x04) (undefined result in C standard)
+    en_US.UTF-8: isspace(8196) = 1
+    en_US: isspace(8196) = 1
+    de_DE.UTF-8: isspace(8196) = 1
+
+c: 8197 = 0x00002005 ((char) 5 = 0x05) (undefined result in C standard)
+    en_US.UTF-8: isspace(8197) = 1
+    en_US: isspace(8197) = 1
+    de_DE.UTF-8: isspace(8197) = 1
+
+c: 8198 = 0x00002006 ((char) 6 = 0x06) (undefined result in C standard)
+    en_US.UTF-8: isspace(8198) = 1
+    en_US: isspace(8198) = 1
+    de_DE.UTF-8: isspace(8198) = 1
+
+c: 8199 = 0x00002007 ((char) 7 = 0x07) (undefined result in C standard)
+    en_US.UTF-8: isspace(8199) = 1
+    en_US: isspace(8199) = 1
+    de_DE.UTF-8: isspace(8199) = 1
+
+c: 8200 = 0x00002008 ((char) 8 = 0x08) (undefined result in C standard)
+    en_US.UTF-8: isspace(8200) = 1
+    en_US: isspace(8200) = 1
+    de_DE.UTF-8: isspace(8200) = 1
+
+c: 8201 = 0x00002009 ((char) 9 = 0x09) (undefined result in C standard)
+    en_US.UTF-8: isspace(8201) = 1
+    en_US: isspace(8201) = 1
+    de_DE.UTF-8: isspace(8201) = 1
+
+c: 8202 = 0x0000200a ((char) 10 = 0x0a) (undefined result in C standard)
+    en_US.UTF-8: isspace(8202) = 1
+    en_US: isspace(8202) = 1
+    de_DE.UTF-8: isspace(8202) = 1
+
+c: 8203 = 0x0000200b ((char) 11 = 0x0b) (undefined result in C standard)
+    en_US.UTF-8: isspace(8203) = 1
+    en_US: isspace(8203) = 1
+    de_DE.UTF-8: isspace(8203) = 1
 ```
 
 Output from `locale`:
@@ -114,7 +180,8 @@ sizeof(int)=4 (32 bits; 8 hex chars)
 EOF=-1 = 0xffffffff
 WARNING: setlocale(LC_CTYPE, "en_US.US-ASCII")=NULL; skipping locale
 WARNING: setlocale(LC_CTYPE, "en_US")=NULL; skipping locale
-testing isspace() in inclusive range [-128, 255] with locales:
+testing isspace() in inclusive range [-128, 8208] with locales:
+  NOTE: values outside [-1, 255] are undefined in the C standard
     C
     en_US.UTF-8
     de_DE.UTF-8
@@ -148,6 +215,51 @@ c: 32 = 0x00000020 ((char) 32 = 0x20)
     C: isspace(32) = 8192
     en_US.UTF-8: isspace(32) = 8192
     de_DE.UTF-8: isspace(32) = 8192
+
+c: 510 = 0x000001fe ((char) -2 = 0xfe) (undefined result in C standard)
+    en_US.UTF-8: isspace(510) = 8192
+    de_DE.UTF-8: isspace(510) = 8192
+
+c: 511 = 0x000001ff ((char) -1 = 0xff) (undefined result in C standard)
+    en_US.UTF-8: isspace(511) = 8192
+    de_DE.UTF-8: isspace(511) = 8192
+
+c: 1278 = 0x000004fe ((char) -2 = 0xfe) (undefined result in C standard)
+    en_US.UTF-8: isspace(1278) = 8192
+    de_DE.UTF-8: isspace(1278) = 8192
+
+c: 1279 = 0x000004ff ((char) -1 = 0xff) (undefined result in C standard)
+    en_US.UTF-8: isspace(1279) = 8192
+    de_DE.UTF-8: isspace(1279) = 8192
+
+c: 1811 = 0x00000713 ((char) 19 = 0x13) (undefined result in C standard)
+    en_US.UTF-8: isspace(1811) = 8192
+    de_DE.UTF-8: isspace(1811) = 8192
+
+c: 1813 = 0x00000715 ((char) 21 = 0x15) (undefined result in C standard)
+    en_US.UTF-8: isspace(1813) = 8192
+    de_DE.UTF-8: isspace(1813) = 8192
+
+c: 1815 = 0x00000717 ((char) 23 = 0x17) (undefined result in C standard)
+    en_US.UTF-8: isspace(1815) = 8192
+    de_DE.UTF-8: isspace(1815) = 8192
+
+c: 1817 = 0x00000719 ((char) 25 = 0x19) (undefined result in C standard)
+    en_US.UTF-8: isspace(1817) = 8192
+    de_DE.UTF-8: isspace(1817) = 8192
+
+c: 1819 = 0x0000071b ((char) 27 = 0x1b) (undefined result in C standard)
+    en_US.UTF-8: isspace(1819) = 8192
+    de_DE.UTF-8: isspace(1819) = 8192
+
+c: 1857 = 0x00000741 ((char) 65 = 0x41) (undefined result in C standard)
+    en_US.UTF-8: isspace(1857) = 8192
+    de_DE.UTF-8: isspace(1857) = 8192
+
+c: 2304 = 0x00000900 ((char) 0 = 0x00) (undefined result in C standard)
+    en_US.UTF-8: isspace(2304) = 8192
+    de_DE.UTF-8: isspace(2304) = 8192
+... TRUNCATED MANY MORE LINES ...
 ```
 
 Output from `locale`:
