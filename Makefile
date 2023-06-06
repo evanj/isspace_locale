@@ -1,3 +1,4 @@
+CC=clang
 CFLAGS=-Wall -Wextra -Werror --std=c17
 
 all: isspace_locale
