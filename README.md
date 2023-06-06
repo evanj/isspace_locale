@@ -1,27 +1,47 @@
 # isspace_locale: weird isspace behaviour on Mac OS X
 
-A C program to print the values where `isspace()` returns true. This was used to understand a strange corner case bug in Postgres when running on Mac OS X.
+A C program to print the values where `isspace()` returns true for different locales. This was used to understand a strange corner case bug in Postgres when running on Mac OS X. See [my blog post for more discussion, and details about the Postgres bug](https://www.evanjones.ca/isspace_locale.html). The short version is you should either use your own version for ASCII-only (below), or use [ICU4C](https://unicode-org.github.io/icu/userguide/icu4c/)'s [u_isspace()](https://unicode-org.github.io/icu-docs/apidoc/dev/icu4c/uchar_8h.html#a48dd198b451e691cf81eb41831474ddc) function.
 
-## Output on Mac OS X
-
-## isspace is weird
-
-The `isspace()` function takes an `int` as an argument, not a `char`. The documentation for this function reads: "The value of the argument must be representable as an unsigned char or the value of EOF.". The value of `EOF` is typically `-1`, so this means you should only pass the values in the inclusive range [-1, 255]. This means a "correct" call to `isspace` requires a cast: `isspace((unsigned char) c)`
-
-## Mac OS X weirdness
-
-The extra fun is on Mac OS X, `isspace()` interpets its argument as a wide character. The man page states:
-
-"The 4.4BSD extension of accepting arguments outside of the range of the unsigned char type in locales with large character sets is considered obsolete and may not be supported in future releases.  The iswspace() function should be used instead."
-
-It appears that when using the UTF-8 character set (the default), it interpets the argument as a Unicode code point. This means it returns true for [0x85 = NEL = Next Line](https://codepoints.net/U+0085), and [0xA0 = NBSP = No-Break Space](https://codepoints.net/U+00A0). By default, a process starts in the C locale, so it should not do this, but if it calls `setlocale()` for any reason, the behaviour can change. To avoid this, use your own `isspace()` function:
-
-```
+```c
+/* Returns true for the 6 ASCII white-space characters: \t \n \v \f \r ' '. */
 int isspace_ascii(int c)
 {
   return c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r' || c == ' ';
 }
 ```
+
+## ASCII white-space characters
+
+| Description | Acronym | C literal | Hex value |
+| --- | --- | --- | --- |
+| horizontal tab | TAB | '\t' | 0x09 |
+| line feed | LF | '\n' | 0x0a |
+| vertical tab | VT | '\v' | 0x0b |
+| form feed | FF | '\f' | 0x0c |
+| carriage return | CR | '\r' | 0x0d |
+| space | SP | ' ' | 0x20 |
+
+
+## isspace is weird
+
+The `isspace()` function takes an `int` as an argument, not a `char`. The documentation for this function reads: "The value of the argument must be representable as an unsigned char or the value of EOF.". The value of `EOF` is typically `-1`, so this means you should only pass the values in the inclusive range [-1, 255]. This means a "correct" call to `isspace` requires a cast: `isspace((unsigned char) c)`
+
+However, when using a non-default locale, such as `en_US.UTF-8`, different systems may return true for other values.
+
+
+## Mac OS X weirdness
+
+On Mac OS X in a UTF-8 locale, `isspace()` interprets its argument as a Unicode code point. This means it returns true for [0x85 = NEL = Next Line](https://codepoints.net/U+0085), and [0xA0 = NBSP = No-Break Space](https://codepoints.net/U+00A0), which are in the "valid" range for `isspace()`. It also returns true for other Unicode white-space characters, such as [0x1680 = Ogham Space Mark](https://codepoints.net/U+1680) and [0x2000 = En Quad](https://codepoints.net/U+2000). By default, a process starts in the C locale, so it should only return true for ASCII white-space characters. However, if it calls `setlocale()` for any reason, the behaviour can change.
+
+The man page mentions this behavior may go away:
+
+"The 4.4BSD extension of accepting arguments outside of the range of the unsigned char type in locales with large character sets is considered obsolete and may not be supported in future releases.  The iswspace() function should be used instead."
+
+
+## Linux weirdness
+
+In UTF-8 locales such as `en_US.UTF-8`, `isspace()` will return true for some values outside the "valid" range declared by the C standard, that don't make any sense to me. For example, `isspace(0x01fe)` is true. I can't figure out why this might be considered a whitespace character.
+
 
 ## Mac OS X Output
 
